@@ -193,36 +193,15 @@ function initParticles() {
 }
 
 // ===== COUNTDOWN TIMER =====
-function updateCountdown() {
-    const now = new Date();
-    const target = new Date(now.getTime() + 4 * 60 * 60 * 1000 + 30 * 60 * 1000);
+let MAINTENANCE_END_TIME = new Date().getTime() + 4 * 60 * 60 * 1000; // Fallback
 
-    // Simpan target di localStorage agar konsisten
-    let savedTarget = localStorage.getItem('maintenanceTarget');
-    if (!savedTarget) {
-        localStorage.setItem('maintenanceTarget', target.getTime());
-        savedTarget = target.getTime();
-    }
-
-    const targetTime = parseInt(savedTarget);
-    const diff = targetTime - now.getTime();
-
-    if (diff <= 0) {
-        localStorage.removeItem('maintenanceTarget');
-        return;
-    }
-
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-    document.getElementById('cdHours').textContent = String(hours).padStart(2, '0');
-    document.getElementById('cdMinutes').textContent = String(minutes).padStart(2, '0');
-    document.getElementById('cdSeconds').textContent = String(seconds).padStart(2, '0');
-}
-
-setInterval(updateCountdown, 1000);
-updateCountdown();
+fetch('/config.json')
+  .then(res => res.json())
+  .then(data => {
+      MAINTENANCE_END_TIME = new Date(data.maintenanceEnd).getTime();
+      updateCountdown(); // Refresh countdown
+  })
+  .catch(() => console.log('Menggunakan fallback countdown'));
 
 // ===== GAME TABS =====
 document.querySelectorAll('.game-tab').forEach(tab => {
