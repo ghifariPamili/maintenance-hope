@@ -192,16 +192,15 @@ function initParticles() {
     animate();
 }
 
-// ===== COUNTDOWN TIMER =====
 // ==========================================
 // ⏰ KONFIGURASI WAKTU SELESAI MAINTENANCE
 // ==========================================
 // Format: 'YYYY-MM-DDTHH:mm:ss±HH:mm'
-// Ganti sesuai kebutuhan. Contoh di bawah = 27 Mei 2026, 15:30 WIB
+// Ganti sesuai kebutuhan. Contoh: 27 Mei 2026, 15:30 WIB
 const MAINTENANCE_END_TIME = '2026-05-27T15:30:00+07:00'; 
 
 // ==========================================
-// 🔄 FUNGSI COUNTDOWN
+// 🔄 FUNGSI COUNTDOWN (TANPA LOCALSTORAGE)
 // ==========================================
 function updateCountdown() {
     const now = new Date().getTime();
@@ -229,7 +228,7 @@ function updateCountdown() {
     document.getElementById('cdSeconds').textContent = String(seconds).padStart(2, '0');
 }
 
-// Jalankan tiap 1 detik
+// Jalankan countdown
 setInterval(updateCountdown, 1000);
 updateCountdown();
 
