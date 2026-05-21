@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛠️ Maintenance - Griv.</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Audio Overlay untuk Autoplay -->
+    <div id="audioOverlay" class="audio-overlay">
+        <div class="overlay-content">
+            <div class="overlay-icon">🎧</div>
+            <h2>Selamat Datang!</h2>
+            <p>Klik dimana saja untuk masuk dan nikmati keseruan 🎮</p>
+            <button id="enterBtn" class="enter-btn">🚀 MASUK</button>
+        </div>
+    </div>
+
+    <!-- Background Music -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="music/chill-lofi.mp3" type="audio/mpeg">
+    </audio>
+    <div class="music-control" id="musicControl" style="display:none;">
+        <button id="musicToggle" class="music-btn" title="Toggle Music">🔊</button>
+    </div>
+
+    <!-- Particles Background -->
+    <canvas id="particlesCanvas"></canvas>
+
+    <!-- Main Container -->
+    <div class="main-container" id="mainContainer" style="display:none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">🛠️ <span>Griv.</span></div>
+            <div class="status-badge">🟡 MAINTENANCE</div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="maintenance-icon">
+                <div class="gear gear-big">⚙️</div>
+                <div class="gear gear-small">⚙️</div>
+            </div>
+            <h1 class="hero-title">Website Sedang Dalam <span class="highlight">Maintenance</span></h1>
+            <p class="hero-subtitle">Website yang Anda tuju sedang di-maintain oleh admin <strong>(Griv.)</strong></p>
+            <p class="hero-desc">Mohon tunggu pemberitahuan admin selanjutnya. Sementara itu, silakan nikmati keseruan yang disediakan admin selama menunggu! 🎉</p>
+            <div class="countdown-wrapper">
+                <p class="countdown-label">⏳ Estimasi Selesai:</p>
+                <div class="countdown" id="countdown">
+                    <div class="countdown-item">
+                        <span class="countdown-num" id="cdHours">00</span>
+                        <span class="countdown-label-small">Jam</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-num" id="cdMinutes">00</span>
+                        <span class="countdown-label-small">Menit</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-num" id="cdSeconds">00</span>
+                        <span class="countdown-label-small">Detik</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Games Section -->
+        <section class="games-section">
+            <h2 class="section-title">🎮 Zona Permainan</h2>
+            <p class="section-subtitle">Mainkan game seru sambil menunggu!</p>
+
+            <!-- Game Tabs -->
+            <div class="game-tabs">
+                <button class="game-tab active" data-game="snake">🐍 Snake</button>
+                <button class="game-tab" data-game="memory">🧠 Memory</button>
+                <button class="game-tab" data-game="clicker">⚡ Clicker</button>
+                <button class="game-tab" data-game="whack">🔨 Whack-a-Mole</button>
+            </div>
+
+            <!-- Snake Game -->
+            <div class="game-panel active" id="gameSnake">
+                <div class="game-header">
+                    <h3>🐍 Snake Game</h3>
+                    <span class="score">Score: <span id="snakeScore">0</span></span>
+                </div>
+                <canvas id="snakeCanvas" width="400" height="400"></canvas>
+                <div class="game-controls">
+                    <button class="game-btn" id="snakeStartBtn">▶️ Mulai</button>
+                    <p class="game-hint">Gunakan Arrow Keys atau WASD untuk bergerak</p>
+                </div>
+            </div>
+
+            <!-- Memory Game -->
+            <div class="game-panel" id="gameMemory">
+                <div class="game-header">
+                    <h3>🧠 Memory Card</h3>
+                    <span class="score">Moves: <span id="memoryMoves">0</span> | Pairs: <span id="memoryPairs">0</span>/8</span>
+                </div>
+                <div class="memory-grid" id="memoryGrid"></div>
+                <div class="game-controls">
+                    <button class="game-btn" id="memoryResetBtn">🔄 Reset</button>
+                </div>
+            </div>
+
+            <!-- Clicker Game -->
+            <div class="game-panel" id="gameClicker">
+                <div class="game-header">
+                    <h3>⚡ Speed Clicker</h3>
+                    <span class="score">Clicks: <span id="clickCount">0</span> | Time: <span id="clickTime">10</span>s</span>
+                </div>
+                <div class="clicker-area" id="clickerArea">
+                    <div class="click-target" id="clickTarget">🎯</div>
+                </div>
+                <div class="game-controls">
+                    <button class="game-btn" id="clickerStartBtn">▶️ Mulai (10 detik!)</button>
+                </div>
+            </div>
+
+            <!-- Whack a Mole -->
+            <div class="game-panel" id="gameWhack">
+                <div class="game-header">
+                    <h3>🔨 Whack-a-Mole</h3>
+                    <span class="score">Score: <span id="whackScore">0</span> | Time: <span id="whackTime">30</span>s</span>
+                </div>
+                <div class="whack-grid" id="whackGrid"></div>
+                <div class="game-controls">
+                    <button class="game-btn" id="whackStartBtn">▶️ Mulai (30 detik!)</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fun Facts / Entertainment -->
+        <section class="entertainment-section">
+            <h2 class="section-title">🎲 Zona Hiburan</h2>
+
+            <div class="entertainment-grid">
+                <!-- Random Quote -->
+                <div class="ent-card">
+                    <h3>💬 Kutipan Hari Ini</h3>
+                    <p class="quote-text" id="quoteText">"Klik tombol untuk mendapatkan kutipan inspiratif!"</p>
+                    <button class="ent-btn" id="newQuoteBtn">Kutipan Baru</button>
+                </div>
+
+                <!-- Joke -->
+                <div class="ent-card">
+                    <h3>😂 Tebak-tebakan</h3>
+                    <p class="joke-text" id="jokeText">Klik untuk lihat tebak-tebakan lucu!</p>
+                    <button class="ent-btn" id="newJokeBtn">Tebak-tebakan Baru</button>
+                </div>
+
+                <!-- Fun Facts -->
+                <div class="ent-card">
+                    <h3>🌟 Fun Facts</h3>
+                    <p class="fact-text" id="factText">Tahukah kamu? Klik untuk fun fact random!</p>
+                    <button class="ent-btn" id="newFactBtn">Facts Baru</button>
+                </div>
+
+                <!-- Color Mood -->
+                <div class="ent-card">
+                    <h3>🎨 Mood Color Generator</h3>
+                    <div class="color-display" id="colorDisplay">#6C63FF</div>
+                    <button class="ent-btn" id="newColorBtn">Generate Warna</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feedback Section -->
+        <section class="feedback-section">
+            <h2 class="section-title">📬 Kotak Masukan</h2>
+            <p class="section-subtitle">Berikan masukan, saran, atau sekadar berbincang dengan admin!</p>
+
+            <form class="feedback-form" id="feedbackForm">
+                <div class="form-group">
+                    <label for="visitorName">👤 Nama (Opsional)</label>
+                    <input type="text" id="visitorName" placeholder="Masukkan nama kamu...">
+                </div>
+                <div class="form-group">
+                    <label for="visitorEmail">📧 Email (Opsional)</label>
+                    <input type="email" id="visitorEmail" placeholder="Masukkan email kamu...">
+                </div>
+                <div class="form-group">
+                    <label for="visitorMessage">💬 Pesan / Masukan / Saran</label>
+                    <textarea id="visitorMessage" rows="5" placeholder="Tulis pesan, masukan, saran, atau sekedar say hi ke admin Griv. 👋" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>😊 Mood Kamu</label>
+                    <div class="mood-selector" id="moodSelector">
+                        <button type="button" class="mood-btn" data-mood="😊" title="Happy">😊</button>
+                        <button type="button" class="mood-btn" data-mood="😎" title="Cool">😎</button>
+                        <button type="button" class="mood-btn" data-mood="🤔" title="Thinking">🤔</button>
+                        <button type="button" class="mood-btn" data-mood="😴" title="Sleepy">😴</button>
+                        <button type="button" class="mood-btn" data-mood="🔥" title="Fire">🔥</button>
+                        <button type="button" class="mood-btn" data-mood="💤" title="Bored">💤</button>
+                        <button type="button" class="mood-btn" data-mood="❤️" title="Love">❤️</button>
+                    </div>
+                    <input type="hidden" id="selectedMood" value="">
+                </div>
+                <button type="submit" class="submit-btn">📤 Kirim Masukan</button>
+                <p class="form-success" id="formSuccess" style="display:none;">✅ Terima kasih! Masukan kamu sudah tersimpan. Admin Griv. akan membacanya!</p>
+            </form>
+
+            <!-- Recent Messages -->
+            <div class="messages-wall" id="messagesWall">
+                <h3>💬 Dinding Pesan Pengunjung</h3>
+                <div class="messages-list" id="messagesList"></div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>🛠️ Maintenance Page by <strong>Griv.</strong></p>
+            <p class="footer-sub">Website akan segera kembali. Terima kasih atas kesabaran Anda! 💙</p>
+            <div class="footer-hearts">
+                <span class="heart">❤️</span>
+                <span class="heart">💙</span>
+                <span class="heart">💜</span>
+                <span class="heart">💚</span>
+                <span class="heart">💛</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
