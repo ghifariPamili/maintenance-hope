@@ -193,15 +193,45 @@ function initParticles() {
 }
 
 // ===== COUNTDOWN TIMER =====
-let MAINTENANCE_END_TIME = new Date().getTime() + 4 * 60 * 60 * 1000; // Fallback
+// ==========================================
+// ⏰ KONFIGURASI WAKTU SELESAI MAINTENANCE
+// ==========================================
+// Format: 'YYYY-MM-DDTHH:mm:ss±HH:mm'
+// Ganti sesuai kebutuhan. Contoh di bawah = 27 Mei 2026, 15:30 WIB
+const MAINTENANCE_END_TIME = '2026-05-27T15:30:00+07:00'; 
 
-fetch('/config.json')
-  .then(res => res.json())
-  .then(data => {
-      MAINTENANCE_END_TIME = new Date(data.maintenanceEnd).getTime();
-      updateCountdown(); // Refresh countdown
-  })
-  .catch(() => console.log('Menggunakan fallback countdown'));
+// ==========================================
+// 🔄 FUNGSI COUNTDOWN
+// ==========================================
+function updateCountdown() {
+    const now = new Date().getTime();
+    const targetTime = new Date(MAINTENANCE_END_TIME).getTime();
+    const diff = targetTime - now;
+
+    // Jika waktu sudah habis
+    if (diff <= 0) {
+        document.getElementById('cdHours').textContent = '00';
+        document.getElementById('cdMinutes').textContent = '00';
+        document.getElementById('cdSeconds').textContent = '00';
+        
+        // Opsional: Tampilkan pesan atau redirect otomatis
+        document.querySelector('.countdown-label').textContent = '✅ Maintenance Selesai!';
+        // window.location.href = 'https://website-aslimu.com'; // Uncomment jika ingin redirect
+        return;
+    }
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById('cdHours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('cdMinutes').textContent = String(minutes).padStart(2, '0');
+    document.getElementById('cdSeconds').textContent = String(seconds).padStart(2, '0');
+}
+
+// Jalankan tiap 1 detik
+setInterval(updateCountdown, 1000);
+updateCountdown();
 
 // ===== GAME TABS =====
 document.querySelectorAll('.game-tab').forEach(tab => {
